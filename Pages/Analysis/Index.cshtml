@@ -1,0 +1,246 @@
+﻿@page
+@model HAT3p5.Pages.Analysis.IndexModel
+@inject HAT3p5.MyLibrary.GlobalVariables GV
+@{
+    ViewData["Title"] = "Analyse Selected Handwriting Styles";
+}
+
+@{
+    if (ViewData["JobId"] == null)
+        ViewData["JobId"] = Guid.NewGuid().ToString("N");
+}
+
+<h3 style="text-align:center; font-style:italic">@ViewData["Title"]</h3>
+<hr />
+
+<div class="row">
+    <div class="col-6 my-auto">
+        <div class="table-bordered">
+            <h4 class="text-center">Unlabelled Handwriting Styles </h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="text-align:center">
+                            Name of Handwriting Style
+                        </th>
+                        <th style="text-align:center">
+                            Number of Uploaded Files
+                        </th>
+                    </tr>
+                </thead>
+                @foreach (var Styles in GV.UnknownImgs)
+                {
+                    <tr>
+                        <th style="text-align:center">
+                            <button type="button" class="collapsible" style="text-align:center">@Styles.HSName</button>
+                            <div class="content">
+
+                                @foreach (var img in Styles.FileNames)
+                                {
+                                    //string FullPath = System.IO.Path.Combine(Styles.FilePath, img);
+                                    <p style="text-align:center">@img</p>
+                                }
+                            </div>
+                        </th>
+                        <th style="text-align:center">
+                            @Html.DisplayFor(model => Styles.NumberOfFiles)
+                        </th>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+    <div class="col-6 my-auto">
+        <div class="table-bordered">
+            <h4 class="text-center">Labelled Handwriting Styles </h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="text-align:center">
+                            Name of Handwriting Style
+                        </th>
+                        <th style="text-align:center">
+                            Number of Uploaded Files
+                        </th>
+                    </tr>
+                </thead>
+                @foreach (var Styles in GV.KnownImgs)
+                {
+                    <tr>
+                        <th style="text-align:center">
+                            <button type="button" class="collapsible" style="text-align:center">@Styles.HSName</button>
+                            <div class="content">
+
+                                @foreach (var img in Styles.FileNames)
+                                {
+                                    //string FullPath = System.IO.Path.Combine(Styles.FilePath, img);
+                                    <p style="text-align:center">@img</p>
+                                }
+                            </div>
+                        </th>
+                        <th style="text-align:center">
+                            @Html.DisplayFor(model => Styles.NumberOfFiles)
+                        </th>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+</div>
+
+<hr />
+<h3 style="text-align:center; font-style:italic; font-size:medium" class="collapsible">Parameter Selection</h3>
+<div class="content">
+    <hr />
+    <div class="row">
+        <div class="col-6 my-auto" style="text-align:center">
+            <h5 style="text-align:center"> Select Keypoints Detection Algorithm </h5>
+            <form method="post" asp-page-handler="KptSelection">
+                <select asp-for="SelectedKpt" asp-items="Model.Options_KeyPoints" style="margin-bottom:10px"></select>
+                <br />
+                <button type="submit" class="btn btn-primary">Apply</button>
+            </form>
+        </div>
+        <div class="col-6 my-auto">
+            @{
+                if (Model.SelectedKpt == "SIFT")
+                {
+                    <h3 style="text-align:center"> Select Rotation in Degrees </h3>
+                    <form method="post" asp-page-handler="Parameter">
+                        <div style="text-align:center" id="valBox">@HAT3p5.Pages.Analysis.IndexModel.SelectedParameter</div>
+                        <input type="range" name="Parameter" min="0" max="45" step="1" onchange="showVal(this.value)" value="@GV.Selected_Parameter" style="margin-bottom:10px;width:100%">
+                        <br />
+                        <div style="text-align:center">
+                            <button type="submit" class="btn btn-primary">Apply</button>
+                        </div>
+                    </form>
+                }
+                if (Model.SelectedKpt == "FAST")
+                {
+                    <h5 style="text-align:center;font-size:medium"> Select percentage of keypoints </h5>
+                    <form method="post" asp-page-handler="Parameter">
+                        <div style="text-align:center" id="valBox">@HAT3p5.Pages.Analysis.IndexModel.SelectedParameter</div>
+                        <input type="range" name="Parameter" min="0.1" max="100" step="0.1" onchange="showVal(this.value)" value="@GV.Selected_Parameter" style="margin-bottom:10px;width:100%">
+                        <br />
+                        <div style="text-align:center">
+                            <button type="submit" class="btn btn-primary">Apply Changes</button>
+                        </div>
+                    </form>
+                }
+            }
+        </div>
+    </div>
+</div>
+<hr />
+
+<div class="row">
+    <div class="col-6 my-auto">
+        <h5>Currently Selected settings:</h5>
+    </div>
+    <div class="col-6 my-auto">
+        <h5 style="color:dodgerblue">Keypoints Detection Algorithm: @HAT3p5.Pages.Analysis.IndexModel.SelectedKpt_Static</h5>
+        <h5 style="color:dodgerblue">Main Keypoint Parameter: @HAT3p5.Pages.Analysis.IndexModel.SelectedParameter</h5>
+    </div>
+</div>
+
+<hr />
+
+<div class="row">
+    @*<div class="col-md-5"></div>*@
+    <div class="col-6 my-auto">
+        <form method="post" asp-page-handler="Analyse">
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary" style="position:center; display:block; margin-left:auto; margin-right:auto; font-size:x-large">Analyse</button>
+            </div>
+        </form>
+        <h5 style="text-align:center">Detection Progress: <strong><span id="detect-status">Waiting to start... </span></strong></h5>
+    </div>
+    
+    <div class="col-6 my-auto">
+        <div class="col-12 my-auto" id="Result" style="display:none">
+            <h3 style="text-align:center; color:greenyellow"><a asp-page="/Analysis/Results"> <button class="btn btn-primary" style="font-size:x-large; background-color:green"> Results </button> </a> </h3>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showVal(newVal) {
+        document.getElementById("valBox").innerHTML = newVal;
+    }
+</script>
+
+<hr />
+<div style="border-style:solid; border-color:blue; border-width:medium; border-radius:10px; padding:3px">
+    <h3 style="text-align:center">Instructions:</h3>
+    <ol>
+        <li>
+            You can check the added handwriting styles and their uploaded files before you starts
+            the analysis.
+        </li>
+        <li>
+            The default parameters should be suitable for most cases; nevertheless, you can change
+            them. Do not forget to click the corresponding "Apply" button after the change. The currently
+            selected settings will be updated automatically.
+        </li>
+        <li>
+            If you decided to change the default parameters, follow these general guidelines:
+            SIFT keypoints can cope better with samples of different scales / image resolutions. On the other
+            hand, FAST keypoints can cope better with samples of a very low contrast or a very low resolution.
+            For more details, please refer to the publications mentioned in the "About" section.
+        </li>
+        <li>
+            Click the "Analyse" button to start the analysis. A green button will apear once the results are ready. 
+            Click this green "Results" button to go to the results page.
+        </li>
+    </ol>
+
+</div>
+
+@section Scripts
+{
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
+    <script>
+        document.head || (document.head = document.getElementsByTagName('head')[0]);
+
+        var connection = new signalR.HubConnectionBuilder()
+            .withUrl("/jobprogress")
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
+        connection.on("DetectProgress",
+            (percent) => {
+                if (percent === 100) {
+                    changeFavicon("/images/done.png");
+                    document.getElementById("detect-status").innerText = "Finished!";
+                    document.getElementById("Result").style.display = "inline";
+                }
+                if (percent === 123)
+                {
+                    changeFavicon("/images/done.png");
+                    document.getElementById("detect-status").innerText = "Terminated! Number of detected features is less than 3.";
+                }
+                else {
+                    changeFavicon("/images/running.png");
+                    document.getElementById("detect-status").innerText = `${percent}%`;
+                }
+            });
+
+            connection.start()
+                .then(_ => connection.invoke("AssociateJob", "@ViewData["JobId"].ToString()"))
+                .catch(err => console.error(err.toString()));
+
+        //changeFavicon("/images/waiting.png");
+
+        function changeFavicon(src) {
+            var link = document.createElement('link'),
+                oldLink = document.getElementById('dynamic-favicon');
+            link.id = 'dynamic-favicon';
+            link.rel = 'shortcut icon';
+            link.href = src;
+            if (oldLink) {
+                document.head.removeChild(oldLink);
+            }
+            document.head.appendChild(link);
+        }
+    </script>
+
+}

@@ -1,0 +1,155 @@
+﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+a.navbar-brand {
+  white-space: normal;
+  text-align: center;
+  word-break: break-all;
+}
+
+/* Provide sufficient contrast against white background */
+a {
+  color: #0366d6;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  font-size: 14px;
+}
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.border-top {
+  border-top: 1px solid #e5e5e5;
+}
+.border-bottom {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow {
+  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy {
+  font-size: 1rem;
+  line-height: inherit;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  white-space: nowrap;
+  line-height: 60px; /* Vertically center the text there */
+}
+
+
+input, button {
+    font: normal 25px 'Open Sans', sans-serif;
+}
+
+.field {
+    margin-top: 20px;
+}
+
+.buttons {
+    margin-top: 20px;
+}
+
+.upload-button {
+    background: #337ab7;
+    border-radius: 50px;
+    text-align: center;
+    position: relative;
+    width: 150px;
+    height: 150px;
+}
+
+    .upload-button .label {
+        line-height: 150px;
+        pointer-events: none;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 150px;
+        height: 150px;
+    }
+
+    .upload-button input {
+        opacity: 0;
+        cursor: pointer;
+        font-size: 150px;
+        width: 150px;
+        height: 150px;
+    }
+
+/* For the Tree-View */
+
+/* Style the button that is used to open and close the collapsible content */
+.collapsible {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+}
+
+    /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+    .active, .collapsible:hover {
+        background-color: #ccc;
+    }
+
+/* Style the collapsible content. Note: hidden by default */
+.content {
+    padding: 0 18px;
+    display: none;
+    overflow: hidden;
+    background-color: #f1f1f1;
+}
+
+/* Style the collapsible content. Note: visible by default */
+.content_visible {
+    padding: 0 18px;
+    display: normal;
+    overflow: auto;
+    background-color: #f1f1f1;
+}
+
+#rcorners1 {
+    border-radius: 25px;
+    border: 2px solid #73AD21;
+    padding: 20px;
+    width: 200px;
+    height: 150px;
+}

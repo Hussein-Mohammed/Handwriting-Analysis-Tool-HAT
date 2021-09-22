@@ -1,0 +1,72 @@
+﻿@page
+@model AboutModel
+@{
+    ViewData["Title"] = "About";
+}
+<h2>@ViewData["Title"]</h2>
+<h3>@Model.Message</h3>
+
+<p>
+    This software tool has been developed by <a href="https://www.csmc.uni-hamburg.de/about/people/mohammed.html" target="_blank"> Dr. Hussein Mohammed</a>
+    as a part of sub-project RFA05: <a href="https://www.csmc.uni-hamburg.de/written-artefacts/research/field-a/rfa05.html" target="_blank">
+        Pattern Recognition in 2D Data from Digitised Images and Advanced Aquisition Techniques
+    </a>.
+</p>
+<br />
+<h3 style="text-align:center; font-style:italic; font-size:medium" class="collapsible">Acknowledgement</h3>
+<div class="content_visible">
+    <p>
+        The development of this software was sponsored by the Cluster of Excellence 2176 ‘Understanding Written Artefacts’, generously
+        funded by the German Research Foundation (DFG), within the scope of the work conducted at Centre for the Study of Manuscript Cultures (CSMC).
+    </p>
+    <p>
+        <a href="http://www.virtualvinodh.com/" target="_blank"> Dr. Vinodh Rajan </a> contributed to this software by optimising several parts of the front-end (GUI)
+    </p>
+</div>
+
+<h3 style="text-align:center; font-style:italic; font-size:medium" class="collapsible">Main Usage</h3>
+<p class="content">
+    The main goal of HAT is to analyse handwriting styles of different scribes and sort them according to their
+    similarity to specific (possibly unknown) handwriting styles. A similarity score will be produced for each of the different
+    handwriting styles (scribes) so that the user can have a relative comparison between the similarities of handwriting styles
+    with respect to specific handwriting styles (possibly from unknown scribes).
+</p>
+
+<h3 style="text-align:center; font-style:italic; font-size:medium" class="collapsible">References</h3>
+<div class="content">
+    <p>
+        This software tool is based on the method presented in the publication: <br />
+        <a href="https://ieeexplore.ieee.org/abstract/document/8270099" target="_blank">
+            H. Mohammed et al., "Normalised Local Naive Bayes
+            Nearest-Neighbour Classifier for Offline Writer Identification", in Document Analysis and Recognition (ICDAR),
+            14th International Conference on. IEEE, 2017, Kyoto, Japan.
+        </a>
+    </p>
+    <br />
+    <p>
+        The settings and recommendations are partially based on the work in:
+        <br />
+        <a href="https://ieeexplore.ieee.org/abstract/document/8583817" target="_blank">
+            H. Mohammed et al., "Writer identification for historical
+            manuscripts: Analysis and optimisation of a classifier as an easy-to-use tool for scholars from the humanities", in 2018
+            16th International Conference on Frontiers in Handwriting Recognition (ICFHR), pages 534–539. IEEE, 2018.
+        </a>
+    </p>
+</div>
+<br />
+<h3 style="position:center; font:bold">Copyrights Notice:</h3>
+<div class="row">
+    <div class="col-12 my-auto">
+        <p>
+            Proper citation of this software is required when it is used to support your research in anyway.
+
+            This software tool is licensed under the <a href="https://creativecommons.org/licenses/by-nc/4.0/legalcode" target="_blank">Creative Commons Attribution-NonCommercial 4.0 International Public License</a>
+        </p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12 my-auto" style="text-align:center">
+        <img src=@Url.Content("~/images/Copyrights.png?xxx=987878787") class="img-responsive" style="width:50%" />
+    </div>
+</div>
+

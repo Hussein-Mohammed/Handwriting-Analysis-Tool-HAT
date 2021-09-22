@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - HAT3.5</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-page="/Index">HAT3.5</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/HowTo">How To</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Contact">Contact</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/About">About</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="row">
+        <div class="col-3 my-auto">
+            <a href="https://www.uni-hamburg.de/en.html" target="_blank"><img src="~/images/Logos/UHH.png" class="img-responsive" style="width:100%; display: block; margin-left: auto; margin-right: auto" /></a>
+        </div>
+        <div class="col-6 my-auto">
+            <h3 style="text-align:center; font-size: calc(1vw + 1vh + 0.5vmin)"><a asp-page="/About">HAT3.5</a> </h3>
+        </div>
+        <div class="col-3 my-auto">
+            <a href="https://www.csmc.uni-hamburg.de/" target="_blank"><img src="~/images/Logos/CSMC.jpg" class="img-responsive" style="width:60%; display: block; margin-left: auto; margin-right: auto" /></a>
+        </div>
+    </div>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2021 - HAT3.5
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

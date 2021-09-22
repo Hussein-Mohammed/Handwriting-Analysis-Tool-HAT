@@ -1,0 +1,254 @@
+﻿@page
+@model HAT3p5.Pages.Labelled.AddImgs_LabelledModel
+@inject HAT3p5.MyLibrary.GlobalVariables GV
+@inject HAT3p5.MyLibrary.TempVariables_Known_Singleton Temp_Known
+@{
+    ViewData["Title"] = "Here you can add known (or labelled) handwriting styles to be considered in the analysis";
+}
+
+<h3 style="text-align:center; font-style:italic">@ViewData["Title"]</h3>
+
+<hr />
+
+
+<div class="row">
+    <div class="col-3 my-auto">
+        <div id="confirmationmsg" class="alert alert-info" style="font-size:small"> Current files: @Temp_Known.TempImgInfo.NumberOfFiles</div>
+    </div>
+    <div class="col-9 my-auto">
+        <h6 style="text-align:center;">@ViewData["confirmation"]</h6>
+    </div>
+</div>
+<div class="row">
+    <div class="col-3 my-auto">
+
+        <form id="form" name="form" enctype="multipart/form-data" method="post">
+            <h5 style="font-size:x-large;color:green;text-align:center">1 </h5>
+            <div style="text-align:center">
+                <button type="button" class="btn btn-primary" onclick="document.getElementById('files').click()">Upload</button>
+            </div>
+            <input id="files" name="files" type="file" size="1" multiple onchange="uploadFiles('files')" style="display:none;" />
+        </form> <br />
+        <p style="font-size:smaller"> Accepted extensions are: ".jpeg", ".jpg", ".tiff", ".tif", ".png" and ".bmp"</p>
+
+
+    </div>
+    <div class="col-9 my-auto">
+        <form method="post" asp-page-handler="HSName">
+            <div class="form-group" id="HSName">
+                <div class="row">
+                    <div class="col-3 my-auto" style="text-align:center">
+                        <h5 style="font-size:x-large;color:green;text-align:center"> </h5>
+                        <label for="HSName_Post" style="font-size:small">Name of Handwriting Style:</label>
+                    </div>
+                    <div class="col-4 my-auto" style="text-align:center">
+                        <br />
+                        <h5 style="font-size:x-large;color:green;text-align:center"> </h5>
+                        <input type="text" class="form-control" name="HSName_Post" value="Labelled_@(GV.KnownImgs.Count()+1)">
+                    </div>
+                    <div class="col-2 my-auto" style="text-align:center">
+                        <h5 style="font-size:x-large;color:green;text-align:center">2 </h5><button type="submit" class="btn btn-primary"> Assign </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<hr />
+<div class=" row">
+    <div class="col-4 my-auto"></div>
+    <div class="col-4 my-auto">
+
+        <div>
+            <form method="post" asp-page-handler="AddHS">
+                <div>
+                    <h5 style="font-size:x-large;color:green;text-align:center">3 </h5>
+                    <div style="text-align:center">
+                        <button class="btn btn-primary" asp-page-handler="AddHS">Add Handwriting Style</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<hr />
+
+@if (GV.KnownImgs.Count() < 2)
+{
+    <hr />
+    <p style="color:crimson">
+        Please add at least two labelled handwriting styles. The similarity scores of the unknown handwriting
+        styles will be generated with respect to these handwriting styles.
+    </p>
+}
+else
+{
+    <h3 style="text-align:center"><a asp-page="/Analysis/Index">Analyse the uploaded handwrting styles</a> </h3>
+}
+
+@{
+    if (GV.KnownImgs != null && GV.KnownImgs.Count() > 0)
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th style="text-align:center">
+                        Name of Handwriting Style
+                    </th>
+                    <th style="text-align:center">
+                        Number of Uploaded Files
+                    </th>
+                </tr>
+            </thead>
+            @foreach (var Styles in GV.KnownImgs)
+            {
+                <tr>
+                    <th style="text-align:center">
+                        <button type="button" class="collapsible" style="text-align:center">@Styles.HSName (Example images)</button>
+                        <div class="content">
+                            @{
+                                int imgCount = 0;
+                                foreach (var img in Styles.FileNames)
+                                {
+                                    if (imgCount > 2)
+                                    {
+                                        break;
+                                    }
+                                    string FullPath = System.IO.Path.Combine(Styles.FilePath, Styles.FileNames[imgCount]);
+                                    <img src="@FullPath.Split("wwwroot")[1]" style="max-width:30%;text-align:center" />
+                                    imgCount++;
+                                }
+                            }
+
+                            @foreach (var img in Styles.FileNames)
+                            {
+                                //string FullPath = System.IO.Path.Combine(Styles.FilePath, img);
+                                <p style="text-align:center">@img</p>
+                            }
+                        </div>
+                    </th>
+                    <th style="text-align:center">
+                        @Html.DisplayFor(model => Styles.NumberOfFiles)
+                    </th>
+                    <th style="text-align:center">
+                        <form method="post" asp-page-handler="DeleteHS">
+                            <button class="btn btn-default" asp-page-handler="DeleteHS">Delete</button>
+                            <input type="hidden" name="HS" value="@Styles.HSName" />
+                        </form>
+                    </th>
+                </tr>
+            }
+        </table>
+    }
+    else
+    {
+        <h4 style="color:crimson"> No files uploaded yet! </h4>
+    }
+
+    @*if (GV.KnownImgs.Count() < 2)
+        {
+            <hr />
+            <p style="color:crimson">
+                Please add at least two labelled handwriting styles. The similarity scores of the unknown handwriting
+                styles will be generated with respect to these handwriting styles.
+            </p>
+        }
+        else
+        {
+            <h3 style="text-align:center"><a asp-page="/Analysis/Index">Analyse the uploaded handwrting styles</a> </h3>
+        }*@
+}
+
+<hr />
+
+@section Scripts {
+    @*@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}*@
+    <script type="text/javascript" language="JavaScript">
+        function uploadFiles(inputId) {
+            var input = document.getElementById(inputId);
+            var files = input.files;
+            var formData = new FormData();
+
+            for (var i = 0; i != files.length; i++) {
+                formData.append("files", files[i]);
+            }
+
+            if (files.length > 0) {
+                $.ajax(
+                    {
+                        type: "POST",
+                        url: "/Labelled/AddImgs_Labelled?handler=Upload",
+                        beforeSend: function (xhr) {
+                            $('#confirmationmsg').text(files.length + " files being uploaded. Please wait");
+
+                            xhr.setRequestHeader("XSRF-TOKEN",
+                                $('input:hidden[name="__RequestVerificationToken"]').val());
+                        },
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (data) {
+                            $('#confirmationmsg').text(files.length + " files uploaded");
+                        }
+                    }
+                );
+            }
+            else {
+                alert('Please select image(s)')
+            }
+        }
+
+    </script>
+}
+
+@if (Model.DuplicatedHS)
+{
+    <script>document.getElementById("confirmationmsg").innerText = "This style name has been already assigned for previously uploaded files.The currently uploaded files will be added to the same handwriting style."</script>
+}
+
+@if (Model.InvalidForm)
+{
+    <script>document.getElementById("confirmationmsg").innerText = "Please select file(s) and press the \"Upload\" button! then insert a valid name for the Handwriting Style and press the \"Assign Name\" button!"</script>
+}
+
+@*<h1 style="text-align:center"><a asp-page="/Labelled/Index">Back to the list of Labelled Handwriting Styles</a> </h1>*@
+
+<hr />
+<div style="border-style:solid; border-color:blue; border-width:medium; border-radius:10px; padding:3px">
+    <h3 style="text-align:center">Instructions:</h3>
+    <p style="text-align:center">
+        You can add handwriting styles by simply uploading their representative images and assigning a unique name
+        to be used in the analysis results.
+    </p>
+    <ol>
+        <li>
+            Upload handwriting images that share the same handwriting style. You can do so by
+            clicking the upload button.
+        </li>
+        <li>
+            Give each handwriting style a unique name. You can do so by filling the related text box
+            and then clicking the "Assign" button.
+        </li>
+        <li>
+            If you did the previous steps correctly, you can add the handwriting style by clicking
+            the "Add" button. Otherwise, a message will show up to tell you what went wrong.
+        </li>
+        <li>
+            You can add more images to an existing handwriting style by assigning the name of that handwriting
+            style to the uploaded images. The application will display a message telling you that this name already
+            exists.
+        </li>
+        <li>
+            You can delete any of the added styles by clicking the "Delete" button
+        </li>
+        <li>
+            After adding at least two handwriitng style, you can move on to the next step.
+        </li>
+    </ol>
+    <h3 style="text-align:center">Additional Remark:</h3>
+    <p style="text-align:center">
+        Remove irrelevant information from your handwriting images when possible before uploading them to the software.
+        This can be done simply by cropping the images and saving only the desired handwritings in a separated image to be used
+        in this software tool.
+    </p>
+</div>

@@ -1,0 +1,130 @@
+﻿@page
+@model HAT3p5.Pages.Analysis.ResultsModel
+@inject HAT3p5.MyLibrary.GlobalVariables GV
+
+@{
+    ViewData["Title"] = "Analysis Results";
+}
+
+<h2 style="text-align:center; font-style:italic">@ViewData["Title"]</h2>
+<hr />
+
+@{
+    if (GV.AllResults.Count() <= 0)
+    {
+        <h3> No results to show, please return back to the Analysis step.</h3>
+        <h3 style="text-align:center"><a asp-page="/Analysis/Index">Analyse the uploaded handwrting styles</a> </h3>
+    }
+    else
+    {
+        if (GV.UnknownImgs != null && GV.UnknownImgs.Count() > 0)
+        {
+            int ImgCounter = 0;
+            foreach (var Unlabelled in GV.UnknownImgs)
+            {
+                <h3>Results for @Unlabelled.HSName:</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th style="text-align:center">
+                                Style Name
+                            </th>
+                            <th style="text-align:center">
+                                Score (Relative Similarity)
+                            </th>
+                        </tr>
+                    </thead>
+                    @if (GV.AllResults != null && GV.AllResults.Count() > 0)
+                    {
+                        @foreach (var Res in GV.AllResults[ImgCounter])
+                        {
+                            <tr>
+                                <th style="text-align:center">
+                                    @GV.KnownImgs[Res.Label].HSName
+                                </th>
+                                <th style="text-align:center">
+                                    @Math.Round(Res.Votes, 1) %
+                                </th>
+                                <th>
+
+                                </th>
+                            </tr>
+                        }
+                        ImgCounter++;
+                    }
+                </table>
+                <hr />
+            }
+        }
+
+        else
+        {
+            <h3> No files uploaded yet! </h3>
+        }
+
+        <div class="row">
+            <div class="col-6 my-auto">
+                <div class="text-center">
+                    <h3> Download Results Files</h3>
+                </div>
+
+                <form method="post">
+                    <div class="text-center">
+                        <button class="btn btn-primary" asp-page-handler="Download" id="Download" name="Download" style="font-size:x-large">Download Results</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-6 my-auto">
+                <div class="text-center">
+                    <h3> Download Detected Features </h3>
+                </div>
+                <form method="post">
+                    <div class="text-center">
+                        <button class="btn btn-primary" asp-page-handler="DrawKeypoint" id="DrawKeypoint" name="DrawKeypoint" style="font-size:x-large">Download Keypoints</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    }
+}
+
+<hr />
+
+<form method="post">
+    <div class="text-center">
+        <p> Click the button below if you want to delete all the files from the application, including the Unlabelled images, the Labelled images and the results.</p>
+        <button class="btn-danger" asp-page-handler="DeleteAll" name="DeleteAll">Delete Everything</button>
+    </div>
+</form>
+
+<hr />
+
+<h3> If you want to calculate new results using different settings, please return back to the Analysis step:</h3>
+<h3 style="text-align:center"><a asp-page="/Analysis/Index">Change Analysis Parameters</a> </h3>
+
+<hr />
+
+<div style="border-style:solid; border-color:blue; border-width:medium; border-radius:10px; padding:3px">
+    <h3 style="text-align:center">Instructions:</h3>
+    <ol>
+        <li>
+            In this page, you should find a table of results for each unlabelled handwriting style.
+        </li>
+        <li>
+            You can download the results files by clicking the "Download Results" button.
+        </li>
+        <li>
+            You can download your images with visual marks on the detected features by the algorithm. the files of the detected features (Keypoints)
+            can be downloaded by clicking the "Download Keypoints" button.
+        </li>
+        <li>
+            You can delete everything by clicking the "Delete Everything" button. You will be redirected
+            to the first page automatically, so that you can start a new test.
+        </li>
+        <li>
+            You can Change the analysis settings and re-run the analysis on the same data by clicking the
+            "Change Analysis Parameters" link.
+        </li>
+    </ol>
+
+</div>
